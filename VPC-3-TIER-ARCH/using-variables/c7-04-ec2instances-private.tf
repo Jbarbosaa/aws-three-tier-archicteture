@@ -17,7 +17,7 @@ module "ec2_instance_private" {
     key_name                            = var.ec2_key_name
     subnet_id                           = each.value
     vpc_security_group_ids              = [module.private_security_group.security_group_id]
-    associate_public_ip_address         = true
+    associate_public_ip_address         = false
     monitoring                          = false
     disable_api_termination             = false
     user_data = file("${path.module}/apache-install.sh")

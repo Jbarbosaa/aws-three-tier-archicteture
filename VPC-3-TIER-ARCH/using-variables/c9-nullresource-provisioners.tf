@@ -38,7 +38,7 @@ resource "null_resource" "bastion_ready" {
     //on_failure = continue
   }
 
-# Creation Time Provisioner - By default, provisioners run when a resource is created.
+
   //provisioner "local-exec" {
   //  command = "echo Destroy time prov `date` >> /tmp/destroy-time.txt"
   //  working_dir = "local-exec-output-files/"

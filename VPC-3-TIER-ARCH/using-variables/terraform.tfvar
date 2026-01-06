@@ -2,4 +2,5 @@
 
 aws_region = "us-east-1"
 environment = "stag"
-business_division "IT"
+business_division = "IT"
+acm_certificate_arn = null

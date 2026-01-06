@@ -12,12 +12,7 @@ variable "ec2_key_name" {
     type        = string
     default     = "terraform-aws"
 }
-#AWS EC2 Private Instance Count 
-variable "ec2_private_instance_count" {
-    description = "Number of Private EC2 Instances"
-    type        = number
-    default     = 2
-}
+
 #SSH Private Key Path
 variable "ssh_private_key_path" {
     description = "Path to the SSH private key file"
@@ -25,3 +20,12 @@ variable "ssh_private_key_path" {
     default     = "~/.ssh/terraform-aws.pem"
   
 }
+
+#--- IGNORE ---
+
+#AWS EC2 Private Instance Count 
+#variable "ec2_private_instance_count" {
+#    description = "Number of Private EC2 Instances"
+#    type        = number
+#    default     = 2
+#}
