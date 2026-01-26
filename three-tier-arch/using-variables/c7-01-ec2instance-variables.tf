@@ -24,8 +24,7 @@ variable "ssh_private_key_path" {
 #--- IGNORE ---
 
 #AWS EC2 Private Instance Count 
-#variable "ec2_private_instance_count" {
-#    description = "Number of Private EC2 Instances"
-#    type        = number
-#    default     = 2
-#}
+variable "ec2_private_instance_count" {
+    description = "Number of Private EC2 Instances"
+    type        = number
+}

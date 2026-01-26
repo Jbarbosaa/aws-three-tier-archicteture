@@ -34,39 +34,41 @@ module "alb" {
 
       stickiness = {
         enabled = false
+        type = "lb_cookie"
+      
+      create_attachment = false
+
       }
     }
   }
 
 # Listeners for the ALB
 # If ACM certificate ARN is not provided, create an HTTP listener only
-  listeners = var.acm_certificate_arn == null ? { #Re
+  listeners = {
     http = {
-      port                  = 80
-      protocol              = "HTTP"
-      forward = { target_group_key = "app"}
-    }
-  } : {
+      port     = 80
+      protocol = "HTTP"
 
-    https_redirect = {
-      port                = 80
-      protocol            = "HTTP"
-      redirect = {
-        port            = "443"
-        protocol        = "HTTPS"
-        status_code     = "HTTP_301"
-      }
+      redirect = var.acm_certificate_arn != null ? {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      } : null
+
+      forward = var.acm_certificate_arn == null ? {
+        target_group_key = "app"
+      } : null
     }
 
-    https = {
-      port                = 443
-      protocol            = "HTTPS"
-      certificate_arn     = var.acm_certificate_arn
-      ssl_policy          = "ELBSecurityPolicy-2016-08"
-      forward = { target_group_key = "app" }
-    }
+    https = var.acm_certificate_arn != null ? {
+      port            = 443
+      protocol        = "HTTPS"
+      certificate_arn = var.acm_certificate_arn
+      ssl_policy      = "ELBSecurityPolicy-2016-08"
+      forward         = { target_group_key = "app" }
+    } : null
   }
-
+  
 #Attach all ec2 instances to the target group
   additional_target_group_attachments = {
     for id in local.app_instance_ids : "app-${id}" => {
