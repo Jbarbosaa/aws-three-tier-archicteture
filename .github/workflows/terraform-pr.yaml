@@ -1,0 +1,51 @@
+name: IaC Pull Request
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+    contents: read
+    id-token: write
+
+jobs:
+    plan:
+        name: Terraform Plan
+        runs-on: ubuntu-latest
+
+        defaults:
+            run:
+                working-directory: ./infrastructure/terraform
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+            
+            - name: Configure AWS Credentials (OIDC)
+              uses: aws-actions/configure-aws-credentials@v3
+              with:
+                  role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+                  aws-region: us-east-1
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+              with:
+                terraform_version: 1.9.8
+
+            - name: Terraform Init
+              run: terraform init -input=false
+
+            - name: Terraform Plan
+              id: plan
+              run: terraform plan -input=false -out=tfplan
+
+            - name: Save Plan Output 
+              uses: actions/upload-artifact@v4
+              with:
+                name: tfplan
+                path: ./infrastructure/terraform/tfplan
+              

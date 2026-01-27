@@ -19,7 +19,7 @@ module "ec2_public" {
         local.common_tags,
         {
             Name = "${local.name}-bastion"
-            Project = "MY-VPC-3 TIER ARCHITECTURE"
+            Project = "my-vpc-three-tier-arch"
         }  
     )
 }

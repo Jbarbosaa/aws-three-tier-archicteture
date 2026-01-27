@@ -18,9 +18,9 @@ module "alb_security_group" {
     tags = merge(
         local.common_tags, 
         {
-            Name = "${local.name}-sg-bastion"
-            Type = "bastion"
-            Project = "MY-VPC-3 TIER ARCHITECTURE"
+            Name = "${local.name}-sg-alb"
+            Type = "alb"
+            Project = "my-vpc-three-tier-arch"
         }
     )
 }

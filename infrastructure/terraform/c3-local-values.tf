@@ -13,6 +13,6 @@ locals {
   common_tags = {
     Owner       = local.owners
     Environment = local.environment
-    Terraform   = "true"
+    ManagedBy   = "Terraform"
   }
 }

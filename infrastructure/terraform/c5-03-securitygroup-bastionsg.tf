@@ -21,7 +21,7 @@ module "public_security_group" {
         {
             Name = "${local.name}-sg-bastion"
             Type = "bastion"
-            Project = "MY-VPC-3 TIER ARCHITECTURE"
+            Project = "my-vpc-three-tier-arch"
         }
     )
 }

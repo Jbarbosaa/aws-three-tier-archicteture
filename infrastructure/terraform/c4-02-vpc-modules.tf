@@ -13,7 +13,12 @@ module "vpc" {
     database_subnets = var.vpc_database_subnets
     create_database_subnet_group = var.create_database_subnet_group
     create_database_subnet_route_table = var.create_database_subnet_route_table
+
+
+# Database External Route Configuration (Not Recommended for Production Environments)
     #create_database_nat_gateway_route = var.create_database_nat_gateway_route
+
+# Database Internet Gateway Route Configuration (Not Recommended for Production Environments)
     #create_database_internet_gateway_route = var.create_database_internet_gateway_route
 
     # NAT Gateways - Outbound Communication for Private Subnets
@@ -28,7 +33,7 @@ module "vpc" {
         local.common_tags,
         {
             Name    = "${local.name}-vpc"
-            Project = "MY-VPC-3 TIER ARCHITECTURE"
+            Project = "my-vpc-three-tier-arch"
         }  
     )
 

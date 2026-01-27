@@ -25,7 +25,7 @@ module "ec2_instance_private" {
         local.common_tags,
         {
             Name = "${local.name}-private-vm"
-            Project = "MY-VPC-3 TIER ARCHITECTURE"
+            Project = "my-vpc-three-tier-arch"
         }  
     )
 

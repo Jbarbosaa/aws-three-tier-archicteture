@@ -14,7 +14,7 @@ resource "aws_eip" "bastion_eip" {
     local.common_tags,
     {
       Name = "${local.name}-bastion-eip"
-      Project = "MY-VPC-3 TIER ARCHITECTURE"
+      Project = "my-vpc-three-tier-arch"
     }  
   )
 }
