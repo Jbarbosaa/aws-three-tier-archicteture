@@ -43,41 +43,34 @@ module "alb" {
 
 # Listeners for the ALB
 # If ACM certificate ARN is not provided, create an HTTP listener only
-  listeners = merge(
-    {
-      http = {
-        port     = 80
-        protocol = "HTTP"
-        default_action = var.acm_certificate_arn != null ? {
-          type    = "redirect"
-          forward = null
-          redirect = {
-            port        = "443"
-            protocol    = "HTTPS"
-            status_code = "HTTP_301"
-          }
-        } : {
-          type     = "forward"
-          redirect = null
-          forward = {
-            target_group_key = "app"
-          }
-        }
+  listeners = var.acm_certificate_arn != null ? {
+    http = {
+      port     = 80
+      protocol = "HTTP"
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
       }
-    },
-    var.acm_certificate_arn != null ? {
-      https = {
-        port            = 443
-        protocol        = "HTTPS"
-        certificate_arn = var.acm_certificate_arn
-        ssl_policy      = "ELBSecurityPolicy-2016-08"
-        default_action  = {
-          type             = "forward"
-          target_group_key = "app"
-        }
+    }
+    https = {
+      port            = 443
+      protocol        = "HTTPS"
+      certificate_arn = var.acm_certificate_arn
+      ssl_policy      = "ELBSecurityPolicy-2016-08"
+      forward = {
+        target_group_key = "app"
       }
-    } : {}
-  )
+    }
+  } : {
+    http = {
+      port     = 80
+      protocol = "HTTP"
+      forward = {
+        target_group_key = "app"
+      }
+    }
+  }
   
 #Attach all ec2 instances to the target group
   additional_target_group_attachments = {
