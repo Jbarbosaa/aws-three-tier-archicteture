@@ -75,9 +75,9 @@ module "alb" {
   
 #Attach all ec2 instances to the target group
   additional_target_group_attachments = {
-    for idx, id in local.app_instance_ids : "app-${idx}" => {
+    for key, inst in module.ec2_instance_private : "app-${key}" => {
       target_group_key = "app"
-      target_id        = id
+      target_id        = try(inst.id, inst.ids[0])
       port             = 80
     }
   }
