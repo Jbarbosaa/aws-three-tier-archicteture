@@ -49,15 +49,19 @@ module "alb" {
         port     = 80
         protocol = "HTTP"
         default_action = var.acm_certificate_arn != null ? {
-          type     = "redirect"
+          type    = "redirect"
+          forward = null
           redirect = {
             port        = "443"
             protocol    = "HTTPS"
             status_code = "HTTP_301"
           }
         } : {
-          type             = "forward"
-          target_group_key = "app"
+          type     = "forward"
+          redirect = null
+          forward = {
+            target_group_key = "app"
+          }
         }
       }
     },
