@@ -48,15 +48,17 @@ module "alb" {
       http = {
         port     = 80
         protocol = "HTTP"
-        redirect = var.acm_certificate_arn != null ? {
-          port        = "443"
-          protocol    = "HTTPS"
-          status_code = "HTTP_301"
-        } : null
-
-        forward = var.acm_certificate_arn == null ? {
+        default_action = var.acm_certificate_arn != null ? {
+          type     = "redirect"
+          redirect = {
+            port        = "443"
+            protocol    = "HTTPS"
+            status_code = "HTTP_301"
+          }
+        } : {
+          type             = "forward"
           target_group_key = "app"
-        } : null
+        }
       }
     },
     var.acm_certificate_arn != null ? {
@@ -65,7 +67,10 @@ module "alb" {
         protocol        = "HTTPS"
         certificate_arn = var.acm_certificate_arn
         ssl_policy      = "ELBSecurityPolicy-2016-08"
-        forward         = { target_group_key = "app" }
+        default_action  = {
+          type             = "forward"
+          target_group_key = "app"
+        }
       }
     } : {}
   )
