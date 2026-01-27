@@ -1,6 +1,6 @@
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "9.17.0"
+  version = "10.5.0"
 
   name = "${var.environment}-alb"
   vpc_id = module.vpc.vpc_id
@@ -43,34 +43,35 @@ module "alb" {
 
 # Listeners for the ALB
 # If ACM certificate ARN is not provided, create an HTTP listener only
-  listeners = var.acm_certificate_arn != null ? {
-    http = {
-      port     = 80
-      protocol = "HTTP"
-      redirect = {
-        port        = "443"
-        protocol    = "HTTPS"
-        status_code = "HTTP_301"
+  listeners = merge(
+    {
+      http = {
+        port     = 80
+        protocol = "HTTP"
+
+        redirect = var.acm_certificate_arn != null ? {
+          port        = "443"
+          protocol    = "HTTPS"
+          status_code = "HTTP_301"
+        } : null
+
+        forward = var.acm_certificate_arn == null ? {
+          target_group_key = "app"
+        } : null
       }
-    }
-    https = {
-      port            = 443
-      protocol        = "HTTPS"
-      certificate_arn = var.acm_certificate_arn
-      ssl_policy      = "ELBSecurityPolicy-2016-08"
-      forward = {
-        target_group_key = "app"
+    },
+    var.acm_certificate_arn != null ? {
+      https = {
+        port            = 443
+        protocol        = "HTTPS"
+        certificate_arn = var.acm_certificate_arn
+        ssl_policy      = "ELBSecurityPolicy-2016-08"
+        forward = {
+          target_group_key = "app"
+        }
       }
-    }
-  } : {
-    http = {
-      port     = 80
-      protocol = "HTTP"
-      forward = {
-        target_group_key = "app"
-      }
-    }
-  }
+    } : {}
+  )
   
 #Attach all ec2 instances to the target group
   additional_target_group_attachments = {
