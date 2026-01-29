@@ -20,7 +20,7 @@ module "ec2_instance_private" {
     associate_public_ip_address         = false
     monitoring                          = false
     disable_api_termination             = false
-    user_data = file("${path.root}/three-tier-arch/apache-install.sh")
+    user_data = file("${path.root}/../../three-tier-arch/apache-install.sh") //script to install apache server on the instance
     tags = merge(
         local.common_tags,
         {

@@ -1,6 +1,6 @@
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "9.17.0"
+  version = "10.5.0"
 
   name = "${var.environment}-alb"
   vpc_id = module.vpc.vpc_id
@@ -35,45 +35,52 @@ module "alb" {
       stickiness = {
         enabled = false
         type = "lb_cookie"
-      
-      create_attachment = false
-
       }
+
+      create_attachment = false
     }
   }
 
 # Listeners for the ALB
 # If ACM certificate ARN is not provided, create an HTTP listener only
-  listeners = {
-    http = {
-      port     = 80
-      protocol = "HTTP"
+  listeners = merge(
+    {
+      http = {
+        port     = 80
+        protocol = "HTTP"
 
-      redirect = var.acm_certificate_arn != null ? {
-        port        = "443"
-        protocol    = "HTTPS"
-        status_code = "HTTP_301"
-      } : null
+        redirect = var.acm_certificate_arn != null ? {
+          port        = "443"
+          protocol    = "HTTPS"
+          status_code = "HTTP_301"
+        } : null
 
-      forward = var.acm_certificate_arn == null ? {
-        target_group_key = "app"
-      } : null
-    }
-
-    https = var.acm_certificate_arn != null ? {
-      port            = 443
-      protocol        = "HTTPS"
-      certificate_arn = var.acm_certificate_arn
-      ssl_policy      = "ELBSecurityPolicy-2016-08"
-      forward         = { target_group_key = "app" }
-    } : null
-  }
+        forward = var.acm_certificate_arn == null ? {
+          target_group_key = "app"
+        } : null
+      }
+    },
+    var.acm_certificate_arn != null ? {
+      https = {
+        port            = 443
+        protocol        = "HTTPS"
+        certificate_arn = var.acm_certificate_arn
+        ssl_policy      = "ELBSecurityPolicy-2016-08"
+        forward = {
+          target_group_key = "app"
+        }
+      }
+    } : {}
+  )
   
 #Attach all ec2 instances to the target group
+
+#{ for <chave>, <valor> in <colecao> : <nova_chave> => <novo_valor> }#
+
   additional_target_group_attachments = {
-    for id in local.app_instance_ids : "app-${id}" => {
+    for key, inst in module.ec2_instance_private : "app-${key}" => {
       target_group_key = "app"
-      target_id        = id
+      target_id        = try(inst.id, inst.ids[0])
       port             = 80
     }
   }
