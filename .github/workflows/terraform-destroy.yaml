@@ -42,3 +42,6 @@ jobs:
                   -backend-config="region=us-east-1" \
                   -backend-config="dynamodb_table=${{ secrets.TF_LOCK_TABLE }}" \
                   -backend-config="encrypt=true"
+
+            - name: Terraform Destroy
+              run: terraform destroy -input=false -auto-approve
