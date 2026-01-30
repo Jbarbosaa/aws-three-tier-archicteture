@@ -16,7 +16,7 @@ jobs:
 
         defaults:
             run:
-                working-directory: ./infrastructure/terraform
+                working-directory: ./infrastructure/terraform-manifests
 
         steps:
             - name: Checkout Repository
@@ -34,7 +34,13 @@ jobs:
                 terraform_version: 1.13.0
 
             - name: Terraform Init
-              run: terraform init -input=false
+              run: |
+                terraform init -input=false \
+                  -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
+                  -backend-config="key=${{ secrets.TF_STATE_KEY || 'dev/terraform.tfstate' }}" \
+                  -backend-config="region=us-east-1" \
+                  -backend-config="dynamodb_table=${{ secrets.TF_LOCK_TABLE }}" \
+                  -backend-config="encrypt=true"
 
             - name: Terraform Plan
               id: plan
@@ -44,5 +50,4 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                 name: tfplan
-                path: ./infrastructure/terraform/tfplan
-              
+                path: ./infrastructure/terraform-manifests/tfplan
