@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'infrastructure/terraform-manifests/'
+      - 'infrastructure/'
 
 permissions:
     contents: read
