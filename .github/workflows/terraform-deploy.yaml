@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'infrastructure/'
+      - 'application/'
 
 permissions:
     contents: read
