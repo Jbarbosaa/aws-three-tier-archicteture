@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'infrastructure/terraform-manifests/**'
+      - 'infrastructure/terraform-manifests/'
 
 permissions:
     contents: read
@@ -51,5 +51,3 @@ jobs:
 
             - name: Terraform Apply
               run: terraform apply -input=false -auto-approve tfplan
-
-              
