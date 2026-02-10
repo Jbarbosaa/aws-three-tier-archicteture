@@ -15,6 +15,7 @@ module "ec2_instance_private" {
     ami                                 = data.aws_ami.amzlinux2.id
     instance_type                       = var.ec2_instance_type
     key_name                            = var.ec2_key_name
+    iam_instance_profile                = aws_iam_instance_profile.ssm_instance_profile.name
     subnet_id                           = each.value
     vpc_security_group_ids              = [module.private_security_group.security_group_id]
     associate_public_ip_address         = false

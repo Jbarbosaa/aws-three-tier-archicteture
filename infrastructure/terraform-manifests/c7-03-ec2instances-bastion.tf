@@ -10,6 +10,7 @@ module "ec2_public" {
     ami                                 = data.aws_ami.amzlinux2.id
     instance_type                       = var.ec2_instance_type
     key_name                            = var.ec2_key_name
+    iam_instance_profile                = aws_iam_instance_profile.ssm_instance_profile.name
     subnet_id                           = element(module.vpc.public_subnets, 0)
     vpc_security_group_ids              = [module.public_security_group.security_group_id]
     associate_public_ip_address         = true
