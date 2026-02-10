@@ -19,7 +19,7 @@ jobs:
 
         defaults:
             run:
-                working-directory: ./infrastructure/terraform-manifests
+                working-directory: ./infrastructure/
 
         steps:
             - name: Checkout Repository
