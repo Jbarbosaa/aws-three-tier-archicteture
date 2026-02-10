@@ -16,10 +16,9 @@ jobs:
         name: Terraform Deploy
         runs-on: ubuntu-latest
         environment: prod
-
         defaults:
             run:
-                working-directory: ./infrastructure/
+                working-directory: ./infrastructure/terraform-manifests
 
         steps:
             - name: Checkout Repository
