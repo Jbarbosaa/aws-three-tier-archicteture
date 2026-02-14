@@ -24,7 +24,7 @@ module "alb" {
       target_type = "instance"
 
       health_check = {
-        path                = "/app1/index.html"
+        path                = "/index.html"
         interval            = 30
         timeout             = 5
         healthy_threshold   = 5

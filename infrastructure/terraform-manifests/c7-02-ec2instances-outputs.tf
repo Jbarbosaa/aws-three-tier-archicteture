@@ -1,23 +1,6 @@
 # AWS EC2 Instance Terraform Outputs
 # ---------------------------------
-# Bastion (público) - módulo com COUNT (lista)
-# Privadas - módulo com FOR_EACH (map)
-
-# Bastion Host (IDs)
-output "bastion_instance_ids" {
-  description = "Public EC2 (bastion) instance IDs"
-  value       = module.ec2_public[*].id
-}
-
-# Bastion Host (Public IPs)
-output "bastion_instance_public_ips" {
-  description = "Public EC2 (bastion) public IPs"
-  value       = module.ec2_public[*].public_ip
-}
-
-# -----------------------------
-# Instâncias privadas (FOR_EACH)
-# -----------------------------
+# Private instances use FOR_EACH (map)
 
 # Private EC2 Instances IDs
 output "private_instance_ids" {
@@ -31,7 +14,7 @@ output "private_instance_private_ips" {
   value       = [for m in values(module.ec2_instance_private) : m.private_ip]
 }
 
-# Private EC2 Instances Public IPs (se existirem)
+# Private EC2 Instances Public IPs (if any)
 output "private_instance_public_ips" {
   description = "Private EC2 instance public IPs (if any)"
   value       = [for m in values(module.ec2_instance_private) : m.public_ip if m.public_ip != null]
