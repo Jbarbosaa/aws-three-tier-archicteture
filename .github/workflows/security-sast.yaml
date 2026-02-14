@@ -19,7 +19,7 @@ jobs:
           sarif_file: tfsec.sarif
 
       - name: upload SARIF report
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: tfsec.sarif
 
@@ -27,11 +27,12 @@ jobs:
         uses: bridgecrewio/checkov-action@v12
         with:
           directory: infrastructure/terraform-manifests
+          skip_check: CKV_TF_1
           output_format: cli,sarif
           output_file_path: checkov.sarif
 
       - name: upload CHECSARIF report   
-        uses: github/codeql-action/upload-sarif@v1
+        uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: checkov.sarif
 

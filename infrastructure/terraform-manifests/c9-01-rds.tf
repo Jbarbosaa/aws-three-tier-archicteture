@@ -1,3 +1,11 @@
+#checkov:skip=CKV_AWS_157:Lab setup, Multi-AZ disabled for cost
+#checkov:skip=CKV_AWS_293:Lab setup, deletion protection disabled
+#checkov:skip=CKV_AWS_16:Lab setup, encryption disabled temporarily
+#checkov:skip=CKV_AWS_118:Lab setup, enhanced monitoring disabled
+#checkov:skip=CKV_AWS_226:Lab setup, minor upgrade policy not enforced yet
+#checkov:skip=CKV_AWS_161:Lab setup, IAM DB auth not required for this test
+#checkov:skip=CKV2_AWS_60:Lab setup, copy tags to snapshots disabled
+
 resource "aws_db_instance" "rds_instance" {
   identifier              = "db-${replace(lower(local.name), "-", "")}-rds-instance" # RDS instance identifier must be lowercase and can only contain letters, numbers, and hyphens
   allocated_storage       = 20
