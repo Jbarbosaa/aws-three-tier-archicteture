@@ -21,7 +21,7 @@ resource "aws_db_instance" "rds_instance" {
 
   enabled_cloudwatch_logs_exports = [ "error", "general", "slowquery" ]
   
-  vpc_security_group_ids = [module.rds_security_group.security_group_id]
+  vpc_security_group_ids = [module.vpc.database_subnet_group_name]
   db_subnet_group_name   = module.rds_subnet_group.db_subnet_group_name
   tags                   = local.common_tags
 }
