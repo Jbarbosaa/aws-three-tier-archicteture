@@ -1,5 +1,5 @@
 resource "aws_db_instance" "rds_instance" {
-  identifier              = "${local.name}-rds-instance"
+  identifier              = "${replace(local.name, "-", "_")}-rds-instance" # RDS instance identifiers cannot contain hyphens, so we replace them with underscores
   allocated_storage       = 20
   storage_type            = "gp2"
   engine                  = "mysql"
