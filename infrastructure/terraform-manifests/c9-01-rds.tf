@@ -18,6 +18,7 @@ resource "aws_db_instance" "rds_instance" {
   backup_retention_period = 7 #retain backups for 7 days, adjust as needed
   backup_window = "03:00-04:00" #schedule backups during off-
   maintenance_window = "Mon:04:00-Mon:05:00" #schedule maintenance during off-hours
+  storage_encrypted = false #disable storage encryption for demo purposes, enable in production for data security
 
   enabled_cloudwatch_logs_exports = [ "error", "general", "slowquery" ]
   
