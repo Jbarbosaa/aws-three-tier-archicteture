@@ -10,8 +10,11 @@ module "rds_security_group" {
   # Ingress rules e CIDR Blocks
   ingress_with_source_security_group_id = [
     {
-        rule = "mysql-3306-tcp"
+        from_port = 3306
+        to_port = 3306
+        protocol = "tcp"
         source_security_group_id = module.app_security_group.security_group_id
+        description = "Allow MySQL access from application security group"
     }
   ]
 
