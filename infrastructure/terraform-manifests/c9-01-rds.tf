@@ -1,11 +1,11 @@
 resource "aws_db_instance" "rds_instance" {
-  identifier              = "db-${regexreplace(lower(local.name), "[^a-z0-9]", "")}-rds-instance" # RDS instance identifier must be lowercase and can only contain letters, numbers, and hyphens
+  identifier              = "db-${replace(lower(local.name), "-", "")}-rds-instance" # RDS instance identifier must be lowercase and can only contain letters, numbers, and hyphens
   allocated_storage       = 20
   storage_type            = "gp2"
   engine                  = "mysql"
   engine_version          = "8.0"
   instance_class          = "db.t3.micro"
-  db_name                 = "${regexreplace(lower(local.name), "[^a-z0-9]", "_")}_db" # MySQL database names cannot contain hyphens, so we replace them with underscores
+  db_name                 = "${replace(lower(local.name), "-", "_")}_db" # MySQL database names cannot contain hyphens, so we replace them with underscores
   username                = "admin"
 
   manage_master_user_password = true
