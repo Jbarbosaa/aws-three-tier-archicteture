@@ -4,8 +4,8 @@ exec > >(tee /var/log/user-data.log | logger -t user-data) 2>&1
 
 #base
 
-yum update -y
-yum install -y jq httpd mysql awscli
+dnf update -y
+dnf install -y jq httpd mariadb105 awscli
 
 # 1 Deploy APP
 systemctl enable httpd
