@@ -27,7 +27,7 @@ SECRET_JSON=$(aws secretsmanager get-secret-value --secret-id "${rds_secret_arn}
 DB_USER=$(echo "$SECRET_JSON" | jq -r .username)
 DB_PASS=$(echo "$SECRET_JSON" | jq -r .password)
 
-mysql -h "${rds_address}" -P "${rds_port}" -u "${DB_USER}" -p"${DB_PASS}" -e"
+mysql -h "${rds_address}" -P "${rds_port}" -u "$${DB_USER}" -p"$${DB_PASS}" -e"
 CREATE DATABASE IF NOT EXISTS appdb;
 USE appdb;
 CREATE TABLE IF NOT EXISTS healthcheck (id INT PRIMARY KEY, status VARCHAR(20));
