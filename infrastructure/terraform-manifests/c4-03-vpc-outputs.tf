@@ -1,7 +1,6 @@
 # VPC Outputs Values
 
 #VPC_ID
-
 output "vpc_id" {
     description = "The ID of the VPC"
     value       = module.vpc.vpc_id
@@ -18,16 +17,19 @@ output "vpc_public_subnets" {
     description = "The Public Subnets of the VPC"
     value       = module.vpc.public_subnets
 }
+
 #Private Subnets
 output "vpc_private_subnets" {
     description = "The Private Subnets of the VPC"
     value       = module.vpc.private_subnets
 }
+
 #Database Subnets
 output "vpc_database_subnets" {
     description = "The Database Subnets of the VPC"
     value       = module.vpc.database_subnets
 }
+
 #NAT Gateway IDs
 output "vpc_nat_gateway_ids" {
     description = "The NAT Gateway IDs of the VPC"
@@ -47,36 +49,22 @@ output "vpc_azs" {
 }
 
 #Security Groups Outputs
-output "public_security_group_id" {
-  description = "The ID of the public security group"
-  value       = module.public_security_group.security_group_id 
-
-}
-output "public_security_group_vpc_id" {
-  description = "The VPC ID of the public security group"
-  value       = module.public_security_group.security_group_vpc_id
-}
-output "public_security_group_name" {
-  description = "The name of the public security group"
-  value       = module.public_security_group.security_group_name
+output "app_security_group_id" {
+  description = "The ID of the app security group"
+  value       = module.app_security_group.security_group_id
 }
 
-output "private_security_group_id" {
-  description = "The ID of the private security group"
-  value       = module.private_security_group.security_group_id 
+output "app_security_group_vpc_id" {
+  description = "The VPC ID of the app security group"
+  value       = module.app_security_group.security_group_vpc_id
+}
 
-}
-output "private_security_group_vpc_id" {
-  description = "The VPC ID of the private security group"
-  value       = module.private_security_group.security_group_vpc_id
-}
-output "private_security_group_name" {
-  description = "The name of the private security group"
-  value       = module.private_security_group.security_group_name
+output "app_security_group_name" {
+  description = "The name of the app security group"
+  value       = module.app_security_group.security_group_name
 }
 
 #Latest Amazon Linux 2 AMI ID
-
 output "latest_amazon_linux_2_ami_id" {
   description = "The latest Amazon Linux 2 AMI ID"
   value       = data.aws_ami.amzlinux2.id

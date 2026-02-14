@@ -14,14 +14,19 @@ module "ec2_instance_private" {
     name                                = "${var.environment}-private-vm"
     ami                                 = data.aws_ami.amzlinux2.id
     instance_type                       = var.ec2_instance_type
-    key_name                            = var.ec2_key_name
     iam_instance_profile                = aws_iam_instance_profile.ssm_instance_profile.name
     subnet_id                           = each.value
-    vpc_security_group_ids              = [module.private_security_group.security_group_id]
+    vpc_security_group_ids              = [module.app_security_group.security_group_id]
     associate_public_ip_address         = false
     monitoring                          = false
     disable_api_termination             = false
-    user_data = file("${path.root}/../../application/apache-install.sh") //script to install apache server on the instance
+
+    user_data = templatefile("${path.root}/../../application/user-data.sh.tpl", {
+        rds_address = aws_db_instance.rds_instance.address
+        rds_port = aws_db_instance.rds_instance.port
+        rds_secret_arn = aws_db_instance.rds_instance.master_user_secret[0].secret_arn
+    }) //script to install user-data on the instance
+
     tags = merge(
         local.common_tags,
         {
@@ -29,5 +34,11 @@ module "ec2_instance_private" {
             Project = "my-vpc-application"
         }  
     )
+
+    metadata_options = {
+        http_endpoint = "enabled" //enable IMDS for instance metadata access
+        http_tokens = "required" //require IMDSv2 for enhanced security
+        http_put_response_hop_limit = 1 //limit the number of hops for IMDS requests to prevent SSRF attacks
+    }
 
 }
