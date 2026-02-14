@@ -7,7 +7,10 @@ on:
                 description: 'The URL of the application to scan'
                 required: true
                 default: 'http://my-application-url.com'
-
+permissions:
+  contents: read
+  security-events: write
+  
 jobs:
     security-dast:
         runs-on: ubuntu-latest
